@@ -1,10 +1,7 @@
-connection: "bigquery-operaciones"
+connection: "@{conexion}"
 
-# include all dashboards (comodín global)
-include: "/**/*.dashboard"
-
-# include all the views
-include: "/views/**/*.view.lkml"
+include: "@{ruta_views}"
+include: "@{ruta_lookml_dashboards}"
 
 datagroup: Modelo_Emision_default_datagroup {
   max_cache_age: "1 hour"
