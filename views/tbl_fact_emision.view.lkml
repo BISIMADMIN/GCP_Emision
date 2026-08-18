@@ -115,7 +115,7 @@ view: tbl_fact_emision {
     sql: ${TABLE}.FCH_CARGA_DATO ;;
   }
 
-  # --- LLAVES SUBROGADAS (Ocultas para el usuario final) ---
+  # --- LLAVES SUBROGADAS  ---
 
   dimension: sk_fecha_emision {
     type: string
