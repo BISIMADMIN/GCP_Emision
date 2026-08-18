@@ -185,4 +185,10 @@ view: tbl_fact_emision {
     label: "Suma Prima Total (MN)"
     sql: ${imp_prima_total_mn} ;;
   }
+  measure: total_prima_neta {
+    type: sum
+    value_format_name: usd
+    label: "Total Prima Neta"
+    sql: ${imp_prima_neta} ;;
+  }
 }
