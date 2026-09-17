@@ -1,7 +1,79 @@
 view: tbl_fact_emision {
   sql_table_name: `comercial.TBL_FACT_EMISION` ;;
 
-  # --- DIMENSIONES REGULARES ---
+  # ==========================================
+  # 1. LLAVES SUBROGADAS
+  # ==========================================
+
+  dimension: sk_fecha_emision {
+    type: string
+    hidden: yes
+    sql: TO_HEX(${TABLE}.SK_FECHA_EMISION) ;;
+  }
+
+  dimension: sk_asegurado {
+    type: string
+    hidden: yes
+    sql: TO_HEX(${TABLE}.SK_ASEGURADO) ;;
+  }
+
+  dimension: sk_oficina_emision {
+    type: string
+    hidden: yes
+    sql: TO_HEX(${TABLE}.SK_OFICINA_EMISION) ;;
+  }
+
+  dimension: sk_agente {
+    type: string
+    hidden: yes
+    sql: TO_HEX(${TABLE}.SK_AGENTE) ;;
+  }
+
+  dimension: sk_promotor {
+    type: string
+    hidden: yes
+    sql: TO_HEX(${TABLE}.SK_PROMOTOR) ;;
+  }
+
+  dimension: sk_poliza {
+    type: string
+    hidden: yes
+    sql: TO_HEX(${TABLE}.SK_POLIZA) ;;
+  }
+
+  dimension: sk_pago {
+    type: string
+    hidden: yes
+    sql: TO_HEX(${TABLE}.SK_PAGO) ;;
+  }
+
+  dimension: sk_vehiculo {
+    type: string
+    hidden: yes
+    sql: TO_HEX(${TABLE}.SK_VEHICULO) ;;
+  }
+
+  # ==========================================
+  # 2. FECHAS
+  # ==========================================
+
+  dimension_group: fch_particion {
+    type: time
+    timeframes: [raw, date, week, month, quarter, year]
+    convert_tz: no
+    datatype: date
+    sql: ${TABLE}.FCH_PARTICION ;;
+  }
+
+  dimension_group: fch_carga_dato {
+    type: time
+    timeframes: [raw, time, date, week, month, quarter, year]
+    sql: ${TABLE}.FCH_CARGA_DATO ;;
+  }
+
+  # ==========================================
+  # 3. DIMENSIONES REGULARES
+  # ==========================================
 
   dimension: pk_poliza {
     type: string
@@ -43,12 +115,21 @@ view: tbl_fact_emision {
     sql: ${TABLE}.BIT_CANCELADA ;;
   }
 
-  # --- DIMENSIONES FINANCIERAS (Con formato de moneda) ---
+  # ==========================================
+  # 4. DIMENSIONES FINANCIERAS (Moneda)
+  # ==========================================
 
   dimension: imp_prima_neta {
     type: number
     value_format_name: usd
     sql: ${TABLE}.IMP_PRIMA_NETA ;;
+  }
+
+  # Dimensión agregada para poder calcular la Prima Pagada del tablero
+  dimension: imp_prima_pagada {
+    type: number
+    value_format_name: usd
+    sql: ${TABLE}.IMP_PRIMA_PAGADA ;;
   }
 
   dimension: imp_prima_total {
@@ -99,77 +180,20 @@ view: tbl_fact_emision {
     sql: ${TABLE}.IMP_DERECHO_POLIZA_ME ;;
   }
 
-  # --- FECHAS ---
-
-  dimension_group: fch_particion {
-    type: time
-    timeframes: [raw, date, week, month, quarter, year]
-    convert_tz: no
-    datatype: date
-    sql: ${TABLE}.FCH_PARTICION ;;
-  }
-
-  dimension_group: fch_carga_dato {
-    type: time
-    timeframes: [raw, time, date, week, month, quarter, year]
-    sql: ${TABLE}.FCH_CARGA_DATO ;;
-  }
-
-  # --- LLAVES SUBROGADAS  ---
-
-  dimension: sk_fecha_emision {
-    type: string
-    hidden: yes
-    sql: ${TABLE}.SK_FECHA_EMISION ;;
-  }
-
-  dimension: sk_asegurado {
-    type: string
-    hidden: yes
-    sql: ${TABLE}.SK_ASEGURADO ;;
-  }
-
-  dimension: sk_oficina_emision {
-    type: string
-    hidden: yes
-    sql: ${TABLE}.SK_OFICINA_EMISION ;;
-  }
-
-  dimension: sk_agente {
-    type: string
-    hidden: yes
-    sql: ${TABLE}.SK_AGENTE ;;
-  }
-
-  dimension: sk_promotor {
-    type: string
-    hidden: yes
-    sql: ${TABLE}.SK_PROMOTOR ;;
-  }
-
-  dimension: sk_poliza {
-    type: string
-    hidden: yes
-    sql: ${TABLE}.SK_POLIZA ;;
-  }
-
-  dimension: sk_pago {
-    type: string
-    hidden: yes
-    sql: ${TABLE}.SK_PAGO ;;
-  }
-
-  dimension: sk_vehiculo {
-    type: string
-    hidden: yes
-    sql: ${TABLE}.SK_VEHICULO ;;
-  }
-
-  # --- MÉTRICAS (Measures) ---
+  # ==========================================
+  # 5. MÉTRICAS BASE
+  # ==========================================
 
   measure: count {
     type: count
     label: "Total de Registros"
+  }
+
+  measure: total_prima_neta {
+    type: sum
+    value_format_name: usd
+    label: "Total Prima Neta"
+    sql: ${imp_prima_neta} ;;
   }
 
   measure: total_prima_emitida_mn {
@@ -185,10 +209,62 @@ view: tbl_fact_emision {
     label: "Suma Prima Total (MN)"
     sql: ${imp_prima_total_mn} ;;
   }
-  measure: total_prima_neta {
+
+  # ==========================================
+  # 6. MÉTRICAS DE TABLERO
+  # ==========================================
+
+  # --- SECCIÓN: PRIMA NETA EMITIDA ---
+
+  measure: prima_neta_emitida_2025 {
+    label: "Prima Emitida 2025"
     type: sum
-    value_format_name: usd
-    label: "Total Prima Neta"
-    sql: ${imp_prima_neta} ;;
+    value_format_name: usd_0
+    sql: CASE WHEN EXTRACT(YEAR FROM ${fch_particion_raw}) = 2025 THEN${imp_prima_neta} ELSE 0 END ;;
+  }
+
+  measure: prima_neta_emitida_2026 {
+    label: "Prima Emitida 2026"
+    type: sum
+    value_format_name: usd_0
+    sql: CASE WHEN EXTRACT(YEAR FROM ${fch_particion_raw}) = 2026 THEN${imp_prima_neta} ELSE 0 END ;;
+  }
+
+  measure: pct_resultado_emitida {
+    label: "% Resultado Emitida"
+    description: "Crecimiento Emitida 2026 vs 2025"
+    type: number
+    value_format_name: percent_2
+    sql: CASE
+           WHEN COALESCE(${prima_neta_emitida_2025}, 0) <= 0 THEN 1.0
+           ELSE SAFE_DIVIDE((${prima_neta_emitida_2026} - ${prima_neta_emitida_2025}), ABS(${prima_neta_emitida_2025}))
+         END ;;
+  }
+
+  # --- SECCIÓN: PRIMA NETA PAGADA ---
+
+  measure: prima_neta_pagada_2025 {
+    label: "Prima Pagada 2025"
+    type: sum
+    value_format_name: usd_0
+    sql: CASE WHEN EXTRACT(YEAR FROM ${fch_particion_raw}) = 2025 THEN${imp_prima_pagada} ELSE 0 END ;;
+  }
+
+  measure: prima_neta_pagada_2026 {
+    label: "Prima Pagada 2026"
+    type: sum
+    value_format_name: usd_0
+    sql: CASE WHEN EXTRACT(YEAR FROM ${fch_particion_raw}) = 2026 THEN${imp_prima_pagada} ELSE 0 END ;;
+  }
+
+  measure: pct_resultado_pagada {
+    label: "% Resultado Pagada"
+    description: "Crecimiento Pagada 2026 vs 2025"
+    type: number
+    value_format_name: percent_2
+    sql: CASE
+           WHEN COALESCE(${prima_neta_pagada_2025}, 0) <= 0 THEN 1.0
+           ELSE SAFE_DIVIDE((${prima_neta_pagada_2026} - ${prima_neta_pagada_2025}), ABS(${prima_neta_pagada_2025}))
+         END ;;
   }
 }
