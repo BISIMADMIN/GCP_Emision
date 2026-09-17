@@ -1,12 +1,20 @@
 view: dim_oficina_emision {
-
   sql_table_name: `comercial.DIM_OFICINA_EMISION` ;;
+
+  # ==========================================
+  # 1. LLAVES
+  # ==========================================
 
   dimension: sk_oficina_emision {
     primary_key: yes
     type: string
-    sql: ${TABLE}.SK_OFICINA_EMISION ;;
+    hidden: yes
+    sql: TO_HEX(${TABLE}.SK_OFICINA_EMISION) ;;
   }
+
+  # ==========================================
+  # 2. DIMENSIONES REGULARES
+  # ==========================================
 
   dimension: cve_oficina {
     type: string
@@ -17,6 +25,10 @@ view: dim_oficina_emision {
     type: string
     sql: ${TABLE}.DESC_OFICINA ;;
   }
+
+  # ==========================================
+  # 3. FECHAS
+  # ==========================================
 
   dimension_group: fch_carga_dato {
     type: time
