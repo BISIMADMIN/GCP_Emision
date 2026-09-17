@@ -1,11 +1,20 @@
 view: dim_tiempo {
   sql_table_name: `comercial.DIM_TIEMPO` ;;
 
+  # ==========================================
+  # 1. LLAVES
+  # ==========================================
+
   dimension: sk_fecha {
     primary_key: yes
     type: string
-    sql: ${TABLE}.SK_FECHA ;;
+    hidden: yes
+    sql: TO_HEX(${TABLE}.SK_FECHA) ;;
   }
+
+  # ==========================================
+  # 2. DIMENSIONES REGULARES
+  # ==========================================
 
   dimension: num_anio {
     type: number
@@ -56,6 +65,10 @@ view: dim_tiempo {
     type: string
     sql: ${TABLE}.DESC_DIA ;;
   }
+
+  # ==========================================
+  # 3. FECHAS
+  # ==========================================
 
   dimension_group: fch_fecha {
     type: time
