@@ -174,7 +174,7 @@ view: tbl_fact_emision {
   }
 
   # ==========================================
-  # 5. MÉTRICAS BASE
+  # 5. MÉTRICAS BASE Y CONSOLIDADAS
   # ==========================================
 
   measure: count {
@@ -182,45 +182,56 @@ view: tbl_fact_emision {
     label: "Total de Registros"
   }
 
-  measure: total_prima_neta {
+  # Métricas actualizadas con manejo de nulos (COALESCE) basadas en el query recibido
+
+  measure: prima_neta_emitida {
     type: sum
     value_format_name: usd
-    label: "Total Prima Neta"
-    sql: ${imp_prima_neta} ;;
+    label: "Prima Neta Emitida"
+    description: "Suma de IMP_PRIMA_NETA manejando nulos"
+    sql: COALESCE(${imp_prima_neta}, 0) ;;
+  }
+
+  measure: prima_total_emitida {
+    type: sum
+    value_format_name: usd
+    label: "Prima Total Emitida"
+    description: "Suma de IMP_PRIMA_TOTAL manejando nulos"
+    sql: COALESCE(${imp_prima_total}, 0) ;;
   }
 
   measure: total_prima_emitida_mn {
     type: sum
     value_format_name: usd
     label: "Suma Prima Emitida (MN)"
-    sql: ${imp_prima_emitida_mn} ;;
+    sql: COALESCE(${imp_prima_emitida_mn}, 0) ;;
   }
 
   measure: total_prima_total_mn {
     type: sum
     value_format_name: usd
     label: "Suma Prima Total (MN)"
-    sql: ${imp_prima_total_mn} ;;
+    sql: COALESCE(${imp_prima_total_mn}, 0) ;;
   }
 
   # ==========================================
   # 6. MÉTRICAS DE TABLERO
   # ==========================================
 
-  # --- SECCIÓN: PRIMA NETA EMITIDA ---
+  # Estas métricas usan la nueva lógica de COALESCE
 
   measure: prima_neta_emitida_2025 {
     label: "Prima Emitida 2025"
     type: sum
     value_format_name: usd_0
-    sql: CASE WHEN EXTRACT(YEAR FROM ${fch_particion_raw}) = 2025 THEN${imp_prima_neta} ELSE 0 END ;;
+    sql: CASE WHEN EXTRACT(YEAR FROM ${fch_particion_raw}) = 2025 THEN COALESCE(${imp_prima_neta}, 0) ELSE 0 END ;;
   }
 
   measure: prima_neta_emitida_2026 {
     label: "Prima Emitida 2026"
     type: sum
     value_format_name: usd_0
-    sql: CASE WHEN EXTRACT(YEAR FROM ${fch_particion_raw}) = 2026 THEN${imp_prima_neta} ELSE 0 END ;;
+    sql: CASE WHEN EXTRACT(YEAR FROM ${fch_particion_raw}) = 2026 THEN COALESCE(${imp_prima_neta}, 0) ELSE 0 END ;;
   }
 
   measure: pct_resultado_emitida {
