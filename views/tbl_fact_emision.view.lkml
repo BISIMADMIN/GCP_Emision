@@ -244,4 +244,17 @@ view: tbl_fact_emision {
            ELSE SAFE_DIVIDE((${prima_neta_emitida_2026} - ${prima_neta_emitida_2025}), ABS(${prima_neta_emitida_2025}))
          END ;;
   }
+
+  measure: prima_neta_mes_actual {
+    label: "Prima Neta (Mes Actual)"
+    description: "Suma la prima únicamente del mes y año en curso. Se actualiza automáticamente."
+    type: sum
+    value_format_name: usd_0
+    sql: CASE
+           WHEN EXTRACT(YEAR FROM ${fch_particion_raw}) = EXTRACT(YEAR FROM CURRENT_DATE())
+            AND EXTRACT(MONTH FROM ${fch_particion_raw}) = EXTRACT(MONTH FROM CURRENT_DATE())
+           THEN COALESCE(${imp_prima_neta}, 0)
+           ELSE 0
+         END ;;
+  }
 }
