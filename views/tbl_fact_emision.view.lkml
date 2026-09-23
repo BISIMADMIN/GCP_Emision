@@ -125,13 +125,6 @@ view: tbl_fact_emision {
     sql: ${TABLE}.IMP_PRIMA_NETA ;;
   }
 
-  # Dimensión agregada para poder calcular la Prima Pagada del tablero
-  dimension: imp_prima_pagada {
-    type: number
-    value_format_name: usd
-    sql: ${TABLE}.IMP_PRIMA_PAGADA ;;
-  }
-
   dimension: imp_prima_total {
     type: number
     value_format_name: usd
@@ -238,33 +231,6 @@ view: tbl_fact_emision {
     sql: CASE
            WHEN COALESCE(${prima_neta_emitida_2025}, 0) <= 0 THEN 1.0
            ELSE SAFE_DIVIDE((${prima_neta_emitida_2026} - ${prima_neta_emitida_2025}), ABS(${prima_neta_emitida_2025}))
-         END ;;
-  }
-
-  # --- SECCIÓN: PRIMA NETA PAGADA ---
-
-  measure: prima_neta_pagada_2025 {
-    label: "Prima Pagada 2025"
-    type: sum
-    value_format_name: usd_0
-    sql: CASE WHEN EXTRACT(YEAR FROM ${fch_particion_raw}) = 2025 THEN${imp_prima_pagada} ELSE 0 END ;;
-  }
-
-  measure: prima_neta_pagada_2026 {
-    label: "Prima Pagada 2026"
-    type: sum
-    value_format_name: usd_0
-    sql: CASE WHEN EXTRACT(YEAR FROM ${fch_particion_raw}) = 2026 THEN${imp_prima_pagada} ELSE 0 END ;;
-  }
-
-  measure: pct_resultado_pagada {
-    label: "% Resultado Pagada"
-    description: "Crecimiento Pagada 2026 vs 2025"
-    type: number
-    value_format_name: percent_2
-    sql: CASE
-           WHEN COALESCE(${prima_neta_pagada_2025}, 0) <= 0 THEN 1.0
-           ELSE SAFE_DIVIDE((${prima_neta_pagada_2026} - ${prima_neta_pagada_2025}), ABS(${prima_neta_pagada_2025}))
          END ;;
   }
 }
