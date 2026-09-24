@@ -4,7 +4,7 @@ view: dim_agente {
   dimension: sk_agente {
     primary_key: yes
     type: string
-    sql: ${TABLE}.SK_AGENTE ;;
+    sql: TO_HEX(${TABLE}.SK_AGENTE) ;;
   }
 
   dimension: pk_agente {
