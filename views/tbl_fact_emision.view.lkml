@@ -241,7 +241,7 @@ view: tbl_fact_emision {
     value_format_name: percent_2
     sql: CASE
            WHEN COALESCE(${prima_total_mn_2025}, 0) <= 0 THEN 1.0
-           ELSE SAFE_DIVIDE((${prima_total_mn_2025} - ${prima_total_mn_2026}), ABS(${prima_total_mn_2025}))
+           ELSE SAFE_DIVIDE((${prima_total_mn_2026} - ${prima_total_mn_2025}), ABS(${prima_total_mn_2025}))
          END ;;
   }
 
