@@ -216,28 +216,32 @@ view: tbl_fact_emision {
   # 6. MÉTRICAS DE TABLERO
   # ==========================================
 
-  measure: prima_neta_emitida_2025 {
-    label: "Prima Emitida 2025"
+# 1. Suma de Prima Total MN para 2025
+
+  measure: prima_total_mn_2025 {
+    label: "Prima Total MN 2025"
     type: sum
     value_format_name: usd_0
-    sql: CASE WHEN EXTRACT(YEAR FROM ${fch_particion_raw}) = 2025 THEN COALESCE(${imp_prima_neta}, 0) ELSE 0 END ;;
+    sql: CASE WHEN EXTRACT(YEAR FROM ${fch_particion_raw}) = 2025 THEN COALESCE(${imp_prima_total_mn}, 0) ELSE 0 END ;;
   }
 
-  measure: prima_neta_emitida_2026 {
-    label: "Prima Emitida 2026"
+  # 2. Suma de Prima Total MN para 2026
+  measure: prima_total_mn_2026 {
+    label: "Prima Total MN 2026"
     type: sum
     value_format_name: usd_0
-    sql: CASE WHEN EXTRACT(YEAR FROM ${fch_particion_raw}) = 2026 THEN COALESCE(${imp_prima_neta}, 0) ELSE 0 END ;;
+    sql: CASE WHEN EXTRACT(YEAR FROM ${fch_particion_raw}) = 2026 THEN COALESCE(${imp_prima_total_mn}, 0) ELSE 0 END ;;
   }
 
-  measure: pct_resultado_emitida {
-    label: "% Resultado Emitida"
-    description: "Crecimiento Emitida 2026 vs 2025"
+  # 3. Métrica del Medidor (Crecimiento YoY)
+  measure: pct_resultado_total_mn {
+    label: "% Resultado Total MN"
+    description: "Crecimiento Prima Total MN 2026 vs 2025"
     type: number
     value_format_name: percent_2
     sql: CASE
-           WHEN COALESCE(${prima_neta_emitida_2025}, 0) <= 0 THEN 1.0
-           ELSE SAFE_DIVIDE((${prima_neta_emitida_2026} - ${prima_neta_emitida_2025}), ABS(${prima_neta_emitida_2025}))
+           WHEN COALESCE(${prima_total_mn_2025}, 0) <= 0 THEN 1.0
+           ELSE SAFE_DIVIDE((${prima_total_mn_2026} - ${prima_total_mn_2025}), ABS(${prima_total_mn_2025}))
          END ;;
   }
 
