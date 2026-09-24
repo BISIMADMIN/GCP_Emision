@@ -5,7 +5,7 @@ view: dim_asegurado {
   dimension: sk_asegurado {
     primary_key: yes
     type: string
-    sql: ${TABLE}.SK_ASEGURADO ;;
+    sql: TO_HEX(${TABLE}.SK_ASEGURADO) ;;
   }
 
   dimension: pk_asegurado {

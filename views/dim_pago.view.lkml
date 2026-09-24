@@ -4,7 +4,7 @@ view: dim_pago {
   dimension: sk_pago {
     primary_key: yes
     type: string
-    sql: ${TABLE}.SK_PAGO ;;
+    sql: TO_HEX(${TABLE}.SK_PAGO) ;;
   }
 
   dimension: pk_pago {

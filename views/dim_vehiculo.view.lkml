@@ -4,7 +4,7 @@ view: dim_vehiculo {
   dimension: sk_vehiculo {
     primary_key: yes
     type: string
-    sql: ${TABLE}.SK_VEHICULO ;;
+    sql: TO_HEX(${TABLE}.SK_VEHICULO) ;;
   }
 
   dimension: pk_vehiculo {

@@ -4,7 +4,7 @@ view: dim_promotor {
   dimension: sk_promotor {
     primary_key: yes
     type: string
-    sql: ${TABLE}.SK_PROMOTOR ;;
+    sql: TO_HEX(${TABLE}.SK_PROMOTOR) ;;
   }
 
   dimension: pk_promotor {

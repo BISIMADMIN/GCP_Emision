@@ -4,7 +4,7 @@ view: dim_poliza {
   dimension: sk_poliza {
     primary_key: yes
     type: string
-    sql: ${TABLE}.SK_POLIZA ;;
+    sql: TO_HEX(${TABLE}.SK_POLIZA) ;;
   }
 
   dimension: pk_poliza {
