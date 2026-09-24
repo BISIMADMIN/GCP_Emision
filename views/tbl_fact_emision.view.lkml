@@ -182,8 +182,6 @@ view: tbl_fact_emision {
     label: "Total de Registros"
   }
 
-  # Métricas actualizadas con manejo de nulos (COALESCE) basadas en el query recibido
-
   measure: prima_neta_emitida {
     type: sum
     value_format_name: usd
@@ -218,8 +216,6 @@ view: tbl_fact_emision {
   # 6. MÉTRICAS DE TABLERO
   # ==========================================
 
-  # Estas métricas usan la nueva lógica de COALESCE
-
   measure: prima_neta_emitida_2025 {
     label: "Prima Emitida 2025"
     type: sum
@@ -245,16 +241,40 @@ view: tbl_fact_emision {
          END ;;
   }
 
-  measure: prima_neta_mes_actual {
-    label: "Prima Neta (Mes Actual)"
-    description: "Suma la prima únicamente del mes y año en curso. Se actualiza automáticamente."
+  # ==========================================
+  # 7. MÉTRICAS DE MES DINÁMICO (ACTUAL / ANTERIOR)
+  # ==========================================
+
+  # Suma estricta del mes actual (Oculta)
+  measure: prima_neta_mes_actual_estricto {
     type: sum
-    value_format_name: usd_0
+    hidden: yes
     sql: CASE
            WHEN EXTRACT(YEAR FROM ${fch_particion_raw}) = EXTRACT(YEAR FROM CURRENT_DATE())
             AND EXTRACT(MONTH FROM ${fch_particion_raw}) = EXTRACT(MONTH FROM CURRENT_DATE())
            THEN COALESCE(${imp_prima_neta}, 0)
            ELSE 0
          END ;;
+  }
+
+  # Suma estricta del mes anterior (Oculta)
+  measure: prima_neta_mes_anterior {
+    type: sum
+    hidden: yes
+    sql: CASE
+           WHEN EXTRACT(YEAR FROM ${fch_particion_raw}) = EXTRACT(YEAR FROM DATE_SUB(CURRENT_DATE(), INTERVAL 1 MONTH))
+            AND EXTRACT(MONTH FROM ${fch_particion_raw}) = EXTRACT(MONTH FROM DATE_SUB(CURRENT_DATE(), INTERVAL 1 MONTH))
+           THEN COALESCE(${imp_prima_neta}, 0)
+           ELSE 0
+         END ;;
+  }
+
+  # La métrica inteligente visible en el tablero
+  measure: prima_neta_mes_dinamico {
+    label: "Prima Neta (Mes Dinámico)"
+    description: "Muestra el mes actual. Si aún no hay datos cargados ($0), muestra automáticamente el mes anterior."
+    type: number
+    value_format_name: usd_0
+    sql: COALESCE(NULLIF(${prima_neta_mes_actual_estricto}, 0),${prima_neta_mes_anterior}) ;;
   }
 }
