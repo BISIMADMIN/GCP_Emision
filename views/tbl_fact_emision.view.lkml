@@ -221,7 +221,7 @@ view: tbl_fact_emision {
   measure: prima_total_mn_2025 {
     label: "Prima Total MN 2025"
     type: sum
-    value_format_name: usd_0
+    value_format_name: usd
     sql: CASE WHEN EXTRACT(YEAR FROM ${fch_particion_raw}) = 2025 THEN COALESCE(${imp_prima_total_mn}, 0) ELSE 0 END ;;
   }
 
@@ -229,7 +229,7 @@ view: tbl_fact_emision {
   measure: prima_total_mn_2026 {
     label: "Prima Total MN 2026"
     type: sum
-    value_format_name: usd_0
+    value_format_name: usd
     sql: CASE WHEN EXTRACT(YEAR FROM ${fch_particion_raw}) = 2026 THEN COALESCE(${imp_prima_total_mn}, 0) ELSE 0 END ;;
   }
 
