@@ -1,5 +1,5 @@
 view: tbl_fact_emision {
-  sql_table_name: `comercial.TBL_FACT_EMISION` ;;
+  sql_table_name: `qlts-dev-mx-au-oro-operaciones.comercial.TBL_FACT_EMISION` ;;
 
   # ==========================================
   # 1. LLAVES SUBROGADAS
