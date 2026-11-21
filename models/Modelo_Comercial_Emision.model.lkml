@@ -15,7 +15,7 @@ explore: tbl_fact_emision {
 
   # 1. Join con Dimensión Agente
   join: dim_agente {
-    type: left_outer
+    type: inner
     relationship: many_to_one
     sql_on: ${tbl_fact_emision.sk_agente} = ${dim_agente.sk_agente} ;;
   }
