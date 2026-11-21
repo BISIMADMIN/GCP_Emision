@@ -117,6 +117,13 @@ view: dim_poliza {
     type: count_distinct
     sql: ${pk_poliza} ;;
   }
+
+  measure: total_numpolizas_unicas {
+    label: "Total de Num Pólizas Únicas"
+    type: count_distinct
+    sql: ${num_poliza} ;;
+  }
+
   measure: conteo_pk_poliza {
     label: "Conteo PK Póliza"
     type: count
