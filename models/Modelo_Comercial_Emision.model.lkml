@@ -43,7 +43,8 @@ explore: tbl_fact_emision {
 
   # 5. Join con Dimensión Póliza
   join: dim_poliza {
-    type: left_outer
+    # type: left_outer
+    type: inner
     relationship: many_to_one
     sql_on: ${tbl_fact_emision.sk_poliza} = ${dim_poliza.sk_poliza} ;;
   }
