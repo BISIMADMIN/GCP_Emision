@@ -109,4 +109,17 @@ view: dim_poliza {
     timeframes: [date, week, month, year]
     sql: ${TABLE}.FCH_CARGA_DATO ;;
   }
+
+ # --- MEDIDAS ---
+
+ measure: total_polizas_unicas {
+    label: "Total de Pólizas Únicas"
+    type: count_distinct
+    sql: ${pk_poliza} ;;
+  }
+  measure: conteo_pk_poliza {
+    label: "Conteo PK Póliza"
+    type: count
+    filters: [pk_poliza: "-NULL"]
+  }
 }
