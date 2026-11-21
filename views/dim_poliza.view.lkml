@@ -1,5 +1,5 @@
 view: dim_poliza {
-  sql_table_name: `comercial.DIM_POLIZA` ;;
+  sql_table_name: `qlts-dev-mx-au-pla-operaciones.operaciones.DIM_POLIZA` ;;
 
   dimension: sk_poliza {
     primary_key: yes

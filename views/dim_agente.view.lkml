@@ -1,5 +1,5 @@
 view: dim_agente {
-  sql_table_name: `comercial.DIM_AGENTE` ;;
+  sql_table_name: `qlts-dev-mx-au-pla-operaciones.operaciones.DIM_AGENTE` ;;
 
   dimension: sk_agente {
     primary_key: yes

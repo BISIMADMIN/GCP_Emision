@@ -22,21 +22,21 @@ explore: tbl_fact_emision {
 
   # 2. Join con Dimensión Asegurado
   join: dim_asegurado {
-    type: left_outer
+    type: inner
     relationship: many_to_one
     sql_on: ${tbl_fact_emision.sk_asegurado} = ${dim_asegurado.sk_asegurado} ;;
   }
 
   # 3. Join con Dimensión Oficina Emisión
   join: dim_oficina_emision {
-    type: left_outer
+    type: inner
     relationship: many_to_one
     sql_on: ${tbl_fact_emision.sk_oficina_emision} = ${dim_oficina_emision.sk_oficina_emision} ;;
   }
 
   # 4. Join con Dimensión Pago
   join: dim_pago {
-    type: left_outer
+    type: inner
     relationship: many_to_one
     sql_on: ${tbl_fact_emision.sk_pago} = ${dim_pago.sk_pago} ;;
   }
@@ -51,21 +51,21 @@ explore: tbl_fact_emision {
 
   # 6. Join con Dimensión Promotor
   join: dim_promotor {
-    type: left_outer
+    type: inner
     relationship: many_to_one
     sql_on: ${tbl_fact_emision.sk_promotor} = ${dim_promotor.sk_promotor} ;;
   }
 
   # 7. Join con Dimensión Tiempo
   join: dim_tiempo {
-    type: left_outer
+    type: inner
     relationship: many_to_one
     sql_on: ${tbl_fact_emision.sk_fecha_emision} = ${dim_tiempo.sk_fecha} ;;
   }
 
   # 8. Join con Dimensión Vehículo
   join: dim_vehiculo {
-    type: left_outer
+    type: inner
     relationship: many_to_one
     sql_on: ${tbl_fact_emision.sk_vehiculo} = ${dim_vehiculo.sk_vehiculo} ;;
   }

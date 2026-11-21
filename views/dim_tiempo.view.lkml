@@ -1,5 +1,5 @@
 view: dim_tiempo {
-  sql_table_name: `comercial.DIM_TIEMPO` ;;
+  sql_table_name: `qlts-dev-mx-au-pla-operaciones.operaciones.DIM_TIEMPO` ;;
 
   # ==========================================
   # 1. LLAVES
